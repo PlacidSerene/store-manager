@@ -1,8 +1,7 @@
 import { type AppType } from "next/app";
 import { Inter } from "next/font/google";
-
 import { api } from "~/utils/api";
-
+import { ClerkProvider, SignedIn } from "@clerk/nextjs";
 import "~/styles/globals.css";
 
 const inter = Inter({
@@ -11,9 +10,11 @@ const inter = Inter({
 });
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <main className={`font-sans ${inter.variable}`}>
-      <Component {...pageProps} />
-    </main>
+    <ClerkProvider {...pageProps}>
+      <main className={`font-sans ${inter.variable}`}>
+        <Component {...pageProps} />
+      </main>
+    </ClerkProvider>
   );
 };
 

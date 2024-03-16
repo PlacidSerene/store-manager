@@ -1,12 +1,22 @@
 import Head from "next/head";
 import Link from "next/link";
-
+import {
+  SignIn,
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  useAuth,
+} from "@clerk/nextjs";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const { data, isLoading } = api.post.getLatest.useQuery();
-  if (isLoading) return <div>...Loading</div>;
-  if (!data) return <div>Something went wrong</div>;
+  const { isLoaded: userLoaded, isSignedIn } = useAuth();
+  if (!isSignedIn) return <SignIn />;
+  if (!userLoaded) return <div>...Loading user</div>;
+
+  // const { data, isLoading } = api.post.getLatest.useQuery();
+  // if (isLoading) return <div>...Loading</div>;
+  // if (!data) return <div>Something went wrong</div>;
   return (
     <>
       <Head>
@@ -16,7 +26,9 @@ export default function Home() {
       </Head>
       <main>
         <h1>Hello world!</h1>
-        <p className="text-2xl text-black">{data.name}</p>
+        {!isSignedIn && <SignInButton />}
+        {!!isSignedIn && <SignOutButton />}
+        {/* <p className="text-2xl text-black">{data.name}</p> */}
       </main>
     </>
   );
